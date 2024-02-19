@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+  	<title>Lync</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" th:href="@{/css/styleMain.css}"/>
+    
+    <!-- Add Bootstrap and Chart.js CSS and JavaScript -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+  </head>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" th:href="@{/images/logo.png}"/>
+  <body>
+		
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="custom-menu">
+<!--					<button type="button" id="sidebarCollapse" class="btn btn-primary">-->
+<!--	          <i class="fa fa-bars"></i>-->
+<!--	          <span class="sr-only">Toggle Menu</span>-->
+<!--	        </button>-->
+        </div>
+                <h1><a th:href="@{/organic/admin/}" class="logo"><img th:src="@{/images/logo.png}" alt="Logo" style=" margin: 0 auto;display: block;"></a></h1>
+       <ul class="list-unstyled components mb-5">
+        <li >
+          <a href="./index.html"><span class="fa fa-home mr-3"></span> Dashboard</a>
+        </li>
+        <li>
+          <a href="./Buyer.html"><span class="fa fa-user mr-3"></span> Buyers</a>
+        </li>
+        <li>
+          <a href="./Seller.html"><span class="fa fa-users mr-3"></span>Sellers</a>
+        </li>
+        <li>
+          <a href="./Product.html"><span class="fa fa-shopping-bag mr-3"></span> Product</a>
+        </li>
+        <!-- <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="fa fa-history mr-3"></span> Transaction
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="./TransactionQuery.html"><span class="fa fa-question-circle mr-3"></span> Query</a></li>
+            <li><a href="./TransactionAcceptedQuery.html"><span class="fa fa-check-circle mr-3"></span> Accepted Query</a></li>
+            <li><a href="./TransactionConfirmedOrders.html"><span class="fa fa-check-square mr-3"></span> Confirmed Orders</a></li>
+          </ul>
+        </li> -->
+        <li class="nav-item active" >
+          <a class="nav-link" data-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
+            <i class="fab fa-trello menu-icon"></i>
+              <span class="fa fa-exchange mr-3">Transaction</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="page-layouts">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item d-none d-lg-block">
+                <a class="nav-link" href="./Query.html">
+                  <i class="fas fa-question-circle menu-icon"></i> <!-- Query logo -->
+                  Query
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="./Accepted_query.html">
+                  <i class="fas fa-check-circle menu-icon"></i> <!-- Accepted Query logo -->
+                  Accepted Query
+                </a>
+              </li>
+              <li class="nav-item d-none d-lg-block">
+                <a class="nav-link" href="pages/layout/horizontal-menu.html">
+                  <i class="fas fa-check-square menu-icon"></i> <!-- Confirmed Order logo -->
+                  Confirmed Order
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+       
+      </ul>
+      <ul class="list-unstyled mb-10">
+        <li>
+          <a href="#"><span class="fa fa-cog mr-3 mr-3"></span> Setting</a>
+        </li>
+        <li>
+          <a href="#"><span class="fa fa-sign-out mr-3"></span> Logout</a>
+        </li>
+      </ul>
+</nav>      
+
+        <!-- Page Content  -->
+      
+        <div id="content" class="p-4 p-md-5 pt-5">
+            <div class="container">
+                <div class="users-container">
+                    <div class="filters">
+                        <h1 style="color: #292929; font-family: 'Lato', sans-serif; font-size: 22px; font-style: normal; font-weight: 700; line-height: 131.9%; ">Product details</h1>
+                        <!-- <select>
+                            <option value="all">All</option>
+                            <option value="Seller">Seller</option>
+                            <option value="Buyer">Buyer</option>
+                        </select> -->
+                        <h1 style="color: #292929; font-family: 'Lato', sans-serif; font-size: 22px; font-style: normal; font-weight: 700; line-height: 131.9%; ">Product Sellers</h1>
+        
+                    </div>
+                    <div class="row">
+                <div class="col-md-8">
+                <div class="card">
+                    <div class="container-fliud">
+                        <div class="wrapper row">
+                            <div class="preview col-md-6">
+                                
+                                <div class="preview-pic tab-content">
+                                  <div class="tab-pane active" id="pic-1"><img src="./images/maizeseeds.png" /></div>
+                                 
+                                </div>
+                                
+                            </div>
+                            <div class="details col-md-6">
+                                <h1 style="color: #292929; font-family: 'Lato', sans-serif; font-size: 22px; font-style: normal; font-weight: 700; line-height: 131.9%; margin-bottom: 20px;"  th:text="${transaction.productName}"> </h1>
+                            
+                                <p class="product-description" th:text="${transaction.productName}"></p>
+                                <h6 class="price" >Other requirement: <span th:text="${transaction.productName}"></span></h6>
+                            
+                                <h6 class="price" >Delivery Location: <span th:text="${transaction.productName}"></span></h6>
+                            
+                                <!-- Certifications -->
+                                <div class="certifications">
+                                    <div class="certification-column">
+                                        <div class="certification">Certi. 1</div>
+                                        <div class="certification">Certi. 2</div>
+                                    </div>
+                                    <div class="certification-column">
+                                        <div class="certification">Certi. 3</div>
+                                        <div class="certification">Certi. 4</div>
+                                    </div>
+                                </div>
+                                <div class="names">
+                                    <div class="name-column">
+                                        <div class="name">Hindustan Enterprise</div>
+                                    </div>
+                                    <div class="name-column">
+                                        <div class="name">Unilever</div>
+                                    </div>
+                                </div>
+<!--                                <div class="action">-->
+<!--                                    <button class="add-to-cart" type="button">send Query</button>-->
+<!--                                    -->
+<!--                                </div>-->
+                            </div>
+                            
+                            </div>
+
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body" style="width: 250px; height: 40px; border-radius: 23px; background: rgba(223, 174, 123, 0.43); padding: 10px;" th:each="seller:${sellers}">
+                              <h5 class="card-title d-flex align-items-center justify-content-between">
+                                  <span th:text="${seller.userName}"></span>
+                                  <span class="status-on">
+                                        <a href="#" class="btn btn-sm btn-secondary btn-custom enable-button" role="button" aria-pressed="true"
+                                           data-toggle="modal" th:data-target="'#userDetailsModal-' + ${seller.uId}" style="background-color: transparent; border: none;">
+                                            <i class="fa fa-eye" style="color: black;"></i>
+                                        </a>
+                                    </span>
+                              </h5>
+
+
+                              <div class="modal fade" th:id="'userDetailsModal-' + ${seller.uId}" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-lg" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h5 class="modal-title" id="userDetailsModalLabel">User Details</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                              </button>
+                                          </div>
+                                          <div class="modal-body">
+                                              <div class="container">
+
+                                                  <div class="row">
+
+                                                      <div class="col-md-4" style="border-right: 2px solid #ccc; padding-right: 15px;">
+                                                          <div style="border-radius: 50%; width: 100px; height: 100px; ">
+                                                              <img src="./images/img_avatar.png" alt="Profile Picture"  style="width: 100%; height: 100%;border-radius: 50%;">
+                                                          </div>
+                                                          <h5 style="margin-top: 15px;" th:text="'User Details - ' + ${seller.userName}" ></h5>
+                                                          <p>amrita811998@gmail.com</p>
+                                                          <!-- You can add a "Change Photo" button here if needed -->
+                                                      </div>
+
+                                                      <!-- Second Column: Personal Information -->
+                                                      <div class="col-md-4">
+                                                          <h6 style="color: #8b909a; margin-bottom: 15px;">Personal Information</h6>
+                                                          <div class="info-block">
+                                                              <strong>Contact No:</strong> +91834568978
+                                                          </div>
+                                                          <div class="info-block">
+                                                              <strong>Gender:</strong>Female
+                                                          </div>
+                                                          <div class="info-block">
+                                                              <strong>DOB:</strong>18-10-1998
+                                                          </div>
+                                                          <div class="info-block">
+                                                              <strong>Member Since:</strong>19 jan 2021
+                                                          </div>
+                                                      </div>
+
+
+                                                      <!-- Third Column: Shipping Address -->
+                                                      <div class="col-md-4" style="border-left: 2px solid #ccc; padding-left: 15px;">
+                                                          <h6 style="color: #8b909a; margin-bottom: 15px;">Shipping Address</h6>
+                                                          <p>987/23-A, Tower A, Raj Nagar, Bhubaneswar, Pincode: 33345</p>
+                                                          <!-- ... (previous modal code) -->
+
+                                                          <!-- Fourth and Fifth Columns: Price Range and ETD -->
+                                                          <div class="row">
+                                                              <!-- Fourth Column: Price Range -->
+                                                              <div class="col-md-6" style="border-right: 2px solid #ccc; padding-right: 15px; background-color: #f8f9fa;">
+                                                                  <h6 style="color: #8b909a; margin-bottom: 15px;">Price Range:65 Rs/kg</h6>
+                                                                  <!-- Add your content for Price Range here -->
+                                                              </div>
+
+                                                              <!-- Fifth Column: ETD -->
+                                                              <div class="col-md-6" style="padding-left: 15px; background-color: #f8f9fa;">
+                                                                  <a class="button-green" id="addCategoryButton" style="text-decoration: none; color: #ffff;"     th:href="@{'/organic/admin/sendQueryDetails/' + ${transaction.tid} + '/' + ${seller.uId}}" >
+                                                                  Send</a>
+
+                                                                  <!-- Add your content for ETD here -->
+                                                              </div>
+                                                          </div>
+
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+
+                                      </div>
+
+                                  </div>
+                              </div>
+                          </div>
+
+
+
+                    
+                      </div>
+                  </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+                    <script th:src="@{/js/jquery.min.js}"></script>
+                    <script th:src="@{/js/popper.js}"></script>
+                    <script th:src="@{/js/bootstrap.min.js}"></script>
+                    <script th:src="@{/js/main.js}"></script>
+ 
+  </body>
+</html>

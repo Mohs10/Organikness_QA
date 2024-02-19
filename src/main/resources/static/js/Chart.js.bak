@@ -1,0 +1,40 @@
+const data = {
+    sales: [50, 60, 70, 80, 90, 100, 110], // Replace with your data
+    loss: [10, 12, 8, 15, 20, 10, 5], // Replace with your data
+    profit: [40, 48, 62, 65, 70, 90, 105], // Replace with your data
+  };
+
+  // Configuration options for the histogram
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+  // Create the histogram chart
+  const histogramChart = new Chart(document.getElementById('histogramChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], // Replace with your labels
+      datasets: [
+        {
+          label: 'Loss',
+          data: data.loss,
+          backgroundColor: '#ccc',
+        },
+        {
+          label: 'Profit',
+          data: data.profit,
+          backgroundColor: '#84C86D', // Green color for profit
+        },
+      ],
+    },
+    options: options,
+  });

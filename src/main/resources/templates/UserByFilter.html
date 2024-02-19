@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Lync Users</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/styleMain.css}"/>
+
+    <!-- Add Bootstrap and Chart.js CSS and JavaScript -->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"-->
+<!--          rel="stylesheet"-->
+<!--          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"-->
+<!--          crossorigin="anonymous">-->
+
+    <style>
+        .truncate-text {
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         max-width: 15ch; /* Adjust the width to fit your layout */
+         transition: max-width 0.3s ease; /* Adding transition for smooth effect */
+     }
+
+     .truncate-text:hover {
+         max-width: none;
+         overflow: visible;
+         white-space: normal;
+     }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/chart.js}"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}"/>
+</head>
+<body>
+
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <!--					<button type="button" id="sidebarCollapse" class="btn btn-primary">-->
+            <!--	          <i class="fa fa-bars"></i>-->
+            <!--	          <span class="sr-only">Toggle Menu</span>-->
+            <!--	        </button>-->
+        </div>
+        <h1><a th:href="@{/organic/admin/}" class="logo"><img th:src="@{/images/logo.png}" alt="Logo" style=" margin: 0 auto;display: block;"></a></h1>
+        <ul class="list-unstyled components mb-5">
+            <li >
+                <a th:href="@{/organic/admin/}"><span class="fa fa-home mr-3"></span> Dashboard</a>
+            </li>
+            <li  class="nav-item active" >
+                <a th:href="@{/organic/admin/sellerbuyers}"><span class="fa fa-user mr-3"></span>Users</a>
+            </li>
+
+            <li>
+                <a th:href="@{/organic/admin/product}"><span class="fa fa-shopping-bag mr-3"></span>Product</a>
+            </li>
+            <!-- <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="fa fa-history mr-3"></span> Transaction
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="./TransactionQuery.html"><span class="fa fa-question-circle mr-3"></span> Query</a></li>
+                <li><a href="./TransactionAcceptedQuery.html"><span class="fa fa-check-circle mr-3"></span> Accepted Query</a></li>
+                <li><a href="./TransactionConfirmedOrders.html"><span class="fa fa-check-square mr-3"></span> Confirmed Orders</a></li>
+              </ul>
+            </li> -->
+            <li >
+                <a class="nav-link" data-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
+                    <i class="fab fa-trello menu-icon mr-3"></i>
+                    Transaction
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="page-layouts">
+                    <ul class="nav flex-column sub-menu ">
+                        <li class="nav-item  d-none d-lg-block">
+                            <a class="nav-item " th:href="@{/organic/admin/transaction}">
+                                <i class="fas fa-question-circle menu-icon"></i> <!-- Query logo -->
+                                Query
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" th:href="@{/organic/admin/AcceptedQuery}">
+                                <i class="fas fa-check-circle menu-icon"></i> <!-- Accepted Query logo -->
+                                Accepted Query
+                            </a>
+                        </li>
+                        <li class="nav-item d-none d-lg-block">
+                            <a class="nav-link" th:href="@{/organic/admin/ConfirmQuery}">
+                                <i class="fas fa-check-square menu-icon"></i> <!-- Confirmed Order logo -->
+                                Confirmed Order
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
+        <ul class="list-unstyled mb-10">
+            <!--            <li>-->
+            <!--                <a href="#"><span class="fa fa-cog mr-3 mr-3"></span> Setting</a>-->
+            <!--            </li>-->
+            <li>
+                <a th:href="@{/logout}">
+                    <span class="fa fa-sign-out-alt mr-3"></span> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <div class="users-container">
+            <div class="filters">
+                <h1 style="color: #292929; font-family: 'Lato', sans-serif; font-size: 22px; font-style: normal; font-weight: 700; line-height: 131.9%; ">Users</h1>
+
+<!--                <input type="text" id="searchInput" placeholder="Enter Name or Email" onkeyup="searchOnKeyUp()">-->
+
+                <input type="text" id="searchInput" placeholder="Enter Name or Email" onkeyup="searchOnKeyUp()" class="search-input" style="padding-right: 20px; background: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot;&gt;&lt;path d=&quot;M21 21l-5.2-5.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot; stroke=&quot;currentColor&quot;/&gt;&lt;/svg>'); background-position: right center; background-repeat: no-repeat;">
+                <select class="form-control" id="categorySelect" onchange="navigateToCategory()" >
+                    <option  th:value="${filter}" th:text="${filter}" style="color: #84C86D;"></option>
+                    <option  value="all">All Users</option>
+                    <option  value="Seller" th:unless="${filter == 'Seller'}">Sellers</option>
+                    <option  value="Buyer" th:unless="${filter == 'Buyer'}">Buyers</option>
+                </select>
+            </div>
+            <script>
+                function navigateToCategory() {
+                    var selectedCategory = document.getElementById("categorySelect").value;
+                    if (selectedCategory === 'all') {
+                        console.log("Redirecting to '/organic/admin/sellerbuyers'");
+                        window.location.href = '/organic/admin/sellerbuyers';
+                    } else {
+                        console.log("Redirecting to '/organic/admin/sellerbuyersFilter/" + selectedCategory + "'");
+                        window.location.href = '/organic/admin/sellerbuyersFilter/' + selectedCategory;
+                    }
+                }
+            </script>
+
+            <table class="users-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>User ID</th>
+                    <th>Email ID</th>
+                    <th>Date of Reg</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="userTableBody">
+                <tr class="user-row" th:each="sellerBuyers:${sellerBuyers}">
+                    <td class="truncate-text" th:text="${sellerBuyers.userName}"></td>
+                    <td th:text="${sellerBuyers.uId}"></td>
+                    <td class="truncate-text" th:text="${sellerBuyers.emailId}"></td>
+                    <td th:text="${sellerBuyers.regDate}"></td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary btn-custom enable-button"
+                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .50rem;"
+                           th:href="@{/organic/admin/statusenable/{id}/{currentPage}(id=${sellerBuyers.uId}, currentPage=${currentPage})}">Enable</a>
+
+                        <a class="btn btn-sm btn-outline-secondary btn-custom enable-button"
+                           th:href="@{/organic/admin/statusdisable/{id}/{currentPage}(id=${sellerBuyers.uId}, currentPage=${currentPage})}">Disable</a>
+
+                        <a class="btn btn-sm btn-outline-secondary btn-custom enable-button"
+                           th:href="@{/organic/admin/sellerbuyer/getbyid/{id}(id=${sellerBuyers.uId})}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+
+<!--                        <a class="btn btn-sm btn-outline-secondary btn-custom enable-button"-->
+<!--                           role="button" aria-pressed="true"-->
+<!--                           data-toggle="modal" th:data-target="'#userDetailsModal-' + ${sellerBuyers.uId}" style="color: #6c757d;">-->
+<!--                            <i class="fas fa-trash-alt"></i>-->
+<!--                        </a>-->
+                    </td>
+
+
+
+                    <div class="modal fade" th:id="'userDetailsModal-' + ${sellerBuyers.uId}" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="userDetailsModalLabel"><SPAN style="color:#f97474;">Please confirm if you want to delete this user.</SPAN></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"> <i class="fas fa-times"></i></span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+
+                                        <div class="row">
+
+                                            <div class="col-md-4" style="border-right: 2px solid #ccc; padding-right: 15px;">
+                                                <div style="border-radius: 50%; width: 100px; height: 100px; ">
+                                                    <img src="./images/img_avatar.png" alt="Profile Picture"  style="width: 100%; height: 100%;border-radius: 50%;">
+                                                </div>
+                                                <h5 style="margin-top: 15px;" th:text="${sellerBuyers.userName}" ></h5>
+                                                <p th:text="${sellerBuyers.emailId}"></p>
+
+                                                <!-- You can add a "Change Photo" button here if needed -->
+                                            </div>
+
+                                            <!-- Second Column: Personal Information -->
+                                            <div class="col-md-4" style="border-right: 2px solid #ccc; padding-right: 15px;">
+                                                <h6 style="color: #8b909a; margin-bottom: 15px;">Personal Information</h6>
+                                                <div class="info-block">
+                                                    <strong>Contact No:</strong> <span th:text="${sellerBuyers.mobileNo}"></span>
+                                                </div>
+                                                <div class="info-block">
+                                                    <strong>Gender:</strong> <span th:text="${sellerBuyers.gender}"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 style="color: #8b909a; margin-bottom: 15px;">More Information</h6>
+
+                                                <div class="info-block">
+                                                    <strong>User Address:</strong> <span th:text="${sellerBuyers.address}"></span>
+                                                </div>
+                                                <div class="info-block">
+                                                    <strong>Member Since:</strong><span th:text="${sellerBuyers.regDate}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Third Column: Shipping Address -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-header">
+                                    <div class="col-md-6">
+                                        <a class="button-green" id="addCategoryButton" style="text-decoration: none; color: #ffff;"     th:href="@{/organic/admin/deleteUserById/{id}(id=${sellerBuyers.uId})}" >
+                                            Delete</a>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <td th:text="${sellerBuyers.enableSeller ? 'Seller' : 'Buyer'}"
+                        th:style="${sellerBuyers.enableSeller ? 'color: green' : 'color: red'}"></td>
+                </tr>
+                <!-- Add more user rows here -->
+                </tbody>
+            </table>
+            <div id="result"></div>
+
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <span id="pageId" style="display:hidden;"   value="{pageNo} (pageNo=${currentPage})" ></span>
+
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage > 1}"
+                       th:href="@{'/organic/admin/sellerbuyersFilter/' + ${filter} + '/' + ${currentPage-1}}">Previous</a>
+
+                    <span class="page-link" th:unless="${currentPage > 1}">Previous</span>
+                </li>
+
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <li class="page-item" th:classappend="${currentPage == i} ? 'active'">
+                        <a class="page-link" th:if="${currentPage !=i}" th:href="@{'/organic/admin/sellerbuyersFilter/' + ${filter} + '/' + ${i}}">[[${i}]]</a>
+                        <span class="page-link" th:unless="${currentPage !=i}">[[${i}]]</span> &nbsp; &nbsp;
+                </li>
+                </span>
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage < totalPages}"
+                       th:href="@{'/organic/admin/sellerbuyersFilter/' + ${filter} + '/' + ${currentPage+1}}">Next</a>
+                    <span class="page-link" th:unless="${currentPage < totalPages}">Next</span>
+                    <span id="pageNo" style="display:hidden;" th:value="${currentPage}" ></span>
+
+                </li>
+            </ul>
+        </nav>
+
+
+
+
+
+        <!-- Pagination -->
+<!--        <div th:if="${totalPages > 1}">-->
+<!--            <div class="row col-sm-10">-->
+<!--                <div class="col-sm-2">-->
+<!--                    Total Rows : [[${totalItems}]]-->
+<!--                </div>-->
+<!--                <div class="col-sm-6">-->
+<!--                        <span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
+<!--                        <a th:if="${currentPage !=i}" th:href="@{'/organic/admin/sellerbuyers/' + ${i}}">[[${i}]]</a>-->
+<!--                        <span th:unless="${currentPage !=i}">[[${i}]]</span> &nbsp; &nbsp;-->
+<!--                        </span>-->
+<!--                </div>-->
+<!--                <div class="col-sm-1">-->
+<!--                    <a th:if="${currentPage < totalPages}"-->
+<!--                       th:href="@{'/organic/admin/sellerbuyers/' + ${currentPage + 1}}">Next</a>-->
+<!--                    <span th:unless="${currentPage < totalPages}">Next</span>-->
+<!--                </div>-->
+<!--                <div class="col-sm-1">-->
+<!--                    <a th:if="${currentPage < totalPages}"-->
+<!--                       th:href="@{'/organic/admin/sellerbuyers/' + ${totalPages + 1}}">Last</a>-->
+<!--                    <span th:unless="${currentPage < totalPages}">Last</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+  function searchOnKeyUp() {
+        var inputValue = document.getElementById("searchInput").value.trim().toLowerCase();
+        var pageNoElement = document.getElementById("pageNo");
+
+
+        // Check if the input is null or empty before triggering actions
+        if (inputValue === null || inputValue === '') {
+            window.location.href = "/organic/admin/sellerbuyers"; // Redirect to desired endpoint
+        } else {
+            fetch(`/organic/admin/searchList/${inputValue}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data from API:', data);
+                    // Process the data returned by the API
+                    updateTableBody(data);
+                })
+                .catch(error => {
+                    console.error('Error searching:', error);
+                    updateTableBody([]);
+                });
+        }
+    }
+function updateTableBody(data) {
+    var tableBody = document.getElementById("userTableBody");
+
+<!--    var currentPage = document.getElementById("pageId").getAttribute("th:value");-->
+
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    if (data.length === 0) {
+        // If no results, you can display a message or take other actions
+        document.getElementById("result").innerText = 'No results found';
+    } else {
+        document.getElementById("result").innerText = ''; // Clear any previous message
+<!--    console.log("Current Page:", currentPage);-->
+        // Iterate over the data and create table rows
+        data.forEach(sellerBuyer => {
+            var row = tableBody.insertRow();
+            row.className = "user-row";
+
+            // Add cells with data
+            var nameCell = row.insertCell();
+            nameCell.textContent = sellerBuyer.userName;
+
+            var userIdCell = row.insertCell();
+            userIdCell.textContent = sellerBuyer.uid;
+
+            var emailIdCell = row.insertCell();
+            emailIdCell.textContent = sellerBuyer.emailId;
+
+            var regDateCell = row.insertCell();
+            regDateCell.textContent = sellerBuyer.regDate;
+
+            var actionCell = row.insertCell();
+
+            // Add your buttons for enabling, disabling, and viewing details
+            var enableButton = document.createElement("a");
+            enableButton.className = "btn btn-sm btn-outline-secondary btn-custom enable-button";
+            enableButton.style.padding = ".25rem .5rem";
+            enableButton.href = `/organic/admin/statusenableBysearch/${sellerBuyer.uid}`;
+            enableButton.textContent = "Enable";
+
+            var disableButton = document.createElement("a");
+            disableButton.className = "btn btn-sm btn-outline-secondary btn-custom enable-button";
+            disableButton.style.padding = ".25rem .5rem";
+            disableButton.href = `/organic/admin/statusdisablBysearche/${sellerBuyer.uid}`;
+            disableButton.textContent = "Disable";
+
+            var viewButton = document.createElement("a");
+            viewButton.className = "btn btn-sm btn-outline-secondary btn-custom enable-button";
+            viewButton.style.padding = ".25rem .5rem";
+            viewButton.href = `/organic/admin/sellerbuyer/getbyid/${sellerBuyer.uid}`;
+            viewButton.innerHTML = '<i class="fa fa-eye"></i>';
+
+            // Append buttons to the action cell
+            actionCell.appendChild(enableButton);
+            actionCell.appendChild(disableButton);
+            actionCell.appendChild(viewButton);
+
+            var statusCell = row.insertCell();
+            statusCell.textContent = sellerBuyer.enableSeller ? 'Seller' : 'Buyer';
+            statusCell.style.color = sellerBuyer.enableSeller ? 'green' : 'red';
+        });
+    }
+}
+
+    /*]]>*/
+</script>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

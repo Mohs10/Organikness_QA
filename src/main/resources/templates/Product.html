@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lync</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/styleMain.css}"/>
+
+    <!-- Add Bootstrap and Chart.js CSS and JavaScript -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+
+    <style>
+          .truncate-text {
+           white-space: nowrap;
+           overflow: hidden;
+           text-overflow: ellipsis;
+           max-width: 15ch; /* Adjust the width to fit your layout */
+           transition: max-width 0.3s ease; /* Adding transition for smooth effect */
+       }
+
+       .truncate-text:hover {
+           max-width: none;
+           overflow: visible;
+           white-space: normal;
+       }
+                      /* Styles for the buttons */
+            .button-green {
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #375b4f;
+              color: #fff;
+              border: none;
+              text-align: center;
+              text-decoration: none;
+              font-size: 16px;
+              margin-top: 10px;
+              cursor: pointer;
+              transition: background-color 0.3s;
+            }
+
+            /* Styles for the button icons */
+            .button-green i {
+              margin-right: 10px;
+            }
+
+            /* Media query for smaller screens */
+            @media (max-width: 768px) {
+              .button-green {
+                padding: 8px 16px;
+                font-size: 14px;
+              }
+            }
+
+
+      </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/chart.js}"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}"/>
+</head>
+<body>
+
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <!--					<button type="button" id="sidebarCollapse" class="btn btn-primary">-->
+            <!--	          <i class="fa fa-bars"></i>-->
+            <!--	          <span class="sr-only">Toggle Menu</span>-->
+            <!--	        </button>-->
+        </div>
+        <h1><a th:href="@{/organic/admin/}" class="logo"><img th:src="@{/images/logo.png}" alt="Logo" style=" margin: 0 auto;display: block;"></a></h1>
+        <ul class="list-unstyled components mb-5">
+            <li >
+                <a th:href="@{/organic/admin/}"><span class="fa fa-home mr-3"></span> Dashboard</a>
+            </li>
+            <li>
+                <a th:href="@{/organic/admin/sellerbuyers}"><span class="fa fa-user mr-3"></span>Users</a>
+            </li>
+
+            <li class="nav-item active" >
+                <a th:href="@{/organic/admin/product}"><span class="fa fa-shopping-bag mr-3"></span>Product</a>
+            </li>
+            <!-- <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="fa fa-history mr-3"></span> Transaction
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="./TransactionQuery.html"><span class="fa fa-question-circle mr-3"></span> Query</a></li>
+                <li><a href="./TransactionAcceptedQuery.html"><span class="fa fa-check-circle mr-3"></span> Accepted Query</a></li>
+                <li><a href="./TransactionConfirmedOrders.html"><span class="fa fa-check-square mr-3"></span> Confirmed Orders</a></li>
+              </ul>
+            </li> -->
+            <li >
+                <a class="nav-link" data-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
+                    <i class="fab fa-trello menu-icon mr-3"></i>
+                    Transaction
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="page-layouts">
+                    <ul class="nav flex-column sub-menu ">
+                        <li class="nav-item  d-none d-lg-block">
+                            <a class="nav-item " th:href="@{/organic/admin/transaction}">
+                                <i class="fas fa-question-circle menu-icon"></i> <!-- Query logo -->
+                                Query
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" th:href="@{/organic/admin/AcceptedQuery}">
+                                <i class="fas fa-check-circle menu-icon"></i> <!-- Accepted Query logo -->
+                                Accepted Query
+                            </a>
+                        </li>
+                        <li class="nav-item d-none d-lg-block">
+                            <a class="nav-link" th:href="@{/organic/admin/ConfirmQuery}">
+                                <i class="fas fa-check-square menu-icon"></i> <!-- Confirmed Order logo -->
+                                Confirmed Order
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
+        <ul class="list-unstyled mb-10">
+            <!--            <li>-->
+            <!--                <a href="#"><span class="fa fa-cog mr-3 mr-3"></span> Setting</a>-->
+            <!--            </li>-->
+            <li>
+                <a th:href="@{/logout}">
+                    <span class="fa fa-sign-out-alt mr-3"></span> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content  -->
+
+    <div id="content" class="p-4 p-md-5 pt-5">
+
+        <div class="container">
+            <div class="row flex-lg-row">
+                <!-- First Column -->
+                <div class="col-md-4">
+                    <h1 style="color: #292929; font-family: 'Lato', sans-serif; font-size: 22px; font-style: normal; font-weight: 700; line-height: 131.9%; margin-top: 30px;">Product</h1>
+                </div>
+                <!-- Second Column -->
+                <div class="col-md-8 d-flex justify-content-end align-items-center">
+                    <div class="form-group me-3">
+                        <label for="categorySelect">Select Category:</label>
+                        <select class="form-control" id="categorySelect" onchange="navigateToCategory()">
+                            <option value="all">All Categories</option>
+                            <!-- Use Thymeleaf to iterate through categories and create options -->
+                            <th:block th:each="category : ${categories}">
+                                <option th:value="${category}" th:text="${category}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <script>
+                              function navigateToCategory() {
+                                  var selectedCategory = document.getElementById("categorySelect").value;
+                                  if (selectedCategory === 'all') {
+                                      console.log("Redirecting to '/organic/admin/product'");
+                                      window.location.href = '/organic/admin/product';
+                                  } else {
+                                      console.log("Redirecting to '/organic/admin/productBy/" + selectedCategory + "'");
+                                      window.location.href = '/organic/admin/productBy/' + selectedCategory;
+                                  }
+                              }
+                          </script>
+
+
+
+
+                    <div class="form-group mt-4">
+                        <a class="button-green" id="addProductButton" style="text-decoration: none; color: #ffff;" th:href="@{/organic/admin/NewProduct}">
+                            <i class="fa fa-plus mr-3"></i>Add Product
+                        </a>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <a class="button-green" id="addCategoryButton" style="text-decoration: none; color: #ffff;" th:href="@{/organic/admin/NewCategory}">
+                            <i class="fa fa-plus mr-3"></i>Add Category
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <!-- Iterate through each product -->
+            <div th:each="product : ${products}" class="col-md-3">
+                <div class="card">
+                    <img th:src="@{'/organic/product/' + ${product.pid}+'/getImage'}" class="card-img-top" alt="Product Image">
+
+                    <!--                        <img th:src="@{${product.image}}" class="card-img-top" th:alt="${product.name + ' Image'}">-->
+                    <div class="card-body">
+                        <h5 class="card-title truncate-text" th:text="${product.name}"></h5>
+                        <p class="card-text truncate-text" th:text="${product.category}"></p>
+
+                        <!--                            <a th:href="@{'/edit/' + ${product.pid}}" class="btn btn-sm btn-outline-success">Edit</a>-->
+                        <!--                            <a th:href="@{'/delete/' + ${product.pid}}" class="btn btn-sm btn-outline-danger">Delete</a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage > 1}"
+                       th:href="@{'/organic/admin/product/' + ${currentPage - 1}}">Previous</a>
+                    <span class="page-link" th:unless="${currentPage > 1}">Previous</span>
+                </li>
+
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <li class="page-item" th:classappend="${currentPage == i} ? 'active'">
+                <a class="page-link" th:if="${currentPage != i}" th:href="@{'/organic/admin/product/' + ${i}}">[[${i}]]</a>
+                <span class="page-link" th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+            </li>
+        </span>
+
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage < totalPages}"
+                       th:href="@{'/organic/admin/product/' + ${currentPage + 1}}">Next</a>
+                    <span class="page-link" th:unless="${currentPage < totalPages}">Next</span>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+
+
+
+</div>
+
+
+
+</div>
+
+<script th:src="@{/js/Chart.js}"></script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/Percentage.js}"></script>
+
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+
+</body>
+</html>
