@@ -76,4 +76,9 @@ public class TransactionTbl {
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
+    @Column(name = "payment_status")
+    private String paymentStatus;
+    @Column(name = "payment_id")
+    private String paymentId;
+
 }
