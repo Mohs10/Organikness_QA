@@ -591,6 +591,7 @@ public class TransactionTbl_ServiceImpl implements TransactionTbl_Service {
             tranxDetail.setProductName(txn.getProductName());
             tranxDetail.setBuyer_name(userSellerService.findUserNameByUId(txn.getBuyer_uid()));
             tranxDetail.setStatusId(txn.getStatusId());
+            tranxDetail.setPaymentStatus(txn.getPaymentStatus());
             tranxDetail.setStatusMeaning(tranxStatusService.findMeaningByStatusId(txn.getStatusId()));
             assert false;
             traxDetailListDTO.add(tranxDetail);

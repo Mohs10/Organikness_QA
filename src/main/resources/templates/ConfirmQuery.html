@@ -122,6 +122,7 @@
                     <th>Date</th>
                     <th>Product</th>
                     <th>Status</th>
+                    <th>Payment Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -129,9 +130,11 @@
                     <tr class="user-row" data-toggle="collapse">
                         <td th:text="${transaction.tid}"></td>
                         <td th:text="${transaction.buyer_name}"></td>
-                        <td th:text="${transaction.orderDate}"></td>
-                        <td th:text="${transaction.productName}"></td>
+                        <td class="truncate-text" th:text="${transaction.orderDate}"></td>
+                        <td class="truncate-text" th:text="${transaction.productName}"></td>
                         <td th:text="${transaction.statusMeaning}"></td>
+                        <td th:text="${transaction.paymentStatus}"></td>
+
                         <td>
                             <a th:href="@{/organic/admin/getBuyerAcceptedQuotationDetails/{id}(id=${transaction.tid})}" class="btn btn-light" role="button" aria-pressed="true">
                                 <i class="fa fa-ellipsis-h" style="font-size:25px"></i>

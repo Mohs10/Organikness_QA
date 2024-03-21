@@ -24,4 +24,6 @@ public interface UserSeller_Repo extends JpaRepository<UserSeller,Long> {
 
     boolean existsByEmailId(String emailId);
 
+
+
 }

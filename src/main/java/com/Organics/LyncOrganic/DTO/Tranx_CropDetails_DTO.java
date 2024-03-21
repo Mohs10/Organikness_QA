@@ -36,6 +36,7 @@ public class Tranx_CropDetails_DTO{
     private Float finalPrice;
     private LocalDate dateOfDelivery; //Format: YYYY-MM-DD
     private String deliveryAddress;
+    private String paymentStatus;
     private List<String> certification;
 
 
