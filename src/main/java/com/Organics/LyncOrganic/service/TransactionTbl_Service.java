@@ -47,4 +47,6 @@ public interface TransactionTbl_Service {
     Page<Tranx_CropDetails_DTO> findTranxByStatusIdGreaterThanOrEqualPaginated(int pageNo,int pageSize,Long statusId);
     Page<Tranx_CropDetails_DTO> findTranxByStatusIdLessThanOrEqualPaginated(int pageNo,int pageSize,Long statusId);
 
+    TransactionTbl setPaymentDetails(Long tId, PaymentDTO paymentDTO);
+
 }

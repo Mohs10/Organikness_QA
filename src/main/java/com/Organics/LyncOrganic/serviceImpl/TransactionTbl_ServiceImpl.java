@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -626,6 +627,24 @@ public class TransactionTbl_ServiceImpl implements TransactionTbl_Service {
 
         return new PageImpl<>(traxDetailListDTO, pageable, tranxListPaginated.getTotalElements());
     }
+
+    @Override
+    public TransactionTbl setPaymentDetails(Long tId, PaymentDTO paymentDTO) {
+        if (paymentDTO == null) {
+            throw new IllegalArgumentException("PaymentDTO cannot be null");
+        }
+        TransactionTbl trnx = tranxRepo.findById(tId)
+                .orElseThrow(() -> new EntityNotFoundException("TransactionTbl with tid " + tId + " not found"));
+        trnx.setPaymentId(paymentDTO.getPaymentId());
+        trnx.setPaymentDate(LocalDate.now());
+        Boolean paymentStatus = paymentDTO.getPaymentStatus();
+        if (paymentStatus == null) {
+            throw new IllegalArgumentException("PaymentStatus cannot be null");
+        }
+        trnx.setPaymentStatus(paymentStatus ? "Paid" : "Failed Transaction");
+        return tranxRepo.save(trnx);
+    }
+
 
 
 }

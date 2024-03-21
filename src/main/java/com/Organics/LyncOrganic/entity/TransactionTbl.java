@@ -81,4 +81,7 @@ public class TransactionTbl {
     @Column(name = "payment_id")
     private String paymentId;
 
+    @Column(name = "payment_date")
+    private LocalDate paymentDate;
+
 }

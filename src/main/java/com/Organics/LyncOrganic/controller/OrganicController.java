@@ -649,18 +649,30 @@ public class OrganicController {
     }
 
 
-//    @GetMapping("/user/ProductCertification")//Buyer view Quotation
-//    public  ResponseEntity<?> ProductCertification(@RequestBody ProductCertificate getIds )
-//    {
-//        UserSeller_DTO userSellerDto =userSellerService.findByUidWithProducts(Math.toIntExact(getIds.getSeller_uid()));
-////        List<String> productCertificates = productCertiService.findCertificateNameOfASellerProduct(getIds.getPid(),getIds.getSeller_uid());
-//        if (userSellerDto != null)
-//        {
-//            return ResponseEntity.status(HttpStatus.FOUND).body(userSellerDto);
-//        }
-//        else {
-//            throw new CustomApiException("Transaction not found on ID:" +getIds.getCertId(), HttpStatus.NOT_FOUND);
-//        }
-//
-//    }
+
+    @PutMapping("/user/buyer/paymentStatus/{uid}/{tid}")
+    public ResponseEntity<?> paymentStatus(@PathVariable(value="uid") Long uid, @PathVariable(value="tid") Long tid, @RequestBody PaymentDTO paymentDTO) {
+        TransactionTbl transactionTbl = tranxService.findByTid(tid);
+
+        if (transactionTbl == null) {
+            throw new CustomApiException("Transaction not found for ID: " + tid, HttpStatus.NOT_FOUND);
+        }
+
+        Long buyerUid = transactionTbl.getBuyer_uid();
+        if (!buyerUid.equals(uid)) {
+            throw new CustomApiException("Cannot process payment. Buyer ID does not match.", HttpStatus.FORBIDDEN);
+        }
+
+        UserSeller userSeller = userSellerService.findById(Math.toIntExact(uid));
+        if (userSeller == null) {
+            throw new CustomApiException("UserSeller not found for ID: " + uid, HttpStatus.NOT_FOUND);
+        }
+
+        TransactionTbl transaction = tranxService.setPaymentDetails(tid, paymentDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(transaction.getPaymentStatus());
+    }
+
+
+
+
 } //// End controller
