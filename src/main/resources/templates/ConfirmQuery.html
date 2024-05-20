@@ -133,7 +133,7 @@
                         <td class="truncate-text" th:text="${transaction.orderDate}"></td>
                         <td class="truncate-text" th:text="${transaction.productName}"></td>
                         <td th:text="${transaction.statusMeaning}"></td>
-                        <td th:text="${transaction.paymentStatus}"></td>
+                        <td th:text="${transaction.paymentStatus} ? ${transaction.paymentStatus} : 'Pending'"></td>
 
                         <td>
                             <a th:href="@{/organic/admin/getBuyerAcceptedQuotationDetails/{id}(id=${transaction.tid})}" class="btn btn-light" role="button" aria-pressed="true">

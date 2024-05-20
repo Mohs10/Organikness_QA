@@ -3,6 +3,7 @@ package com.Organics.LyncOrganic.serviceImpl;
 import com.Organics.LyncOrganic.CustomExceptionHandler.CustomApiException;
 import com.Organics.LyncOrganic.DTO.Product_DTO;
 import com.Organics.LyncOrganic.DTO.UserSeller_DTO;
+import com.Organics.LyncOrganic.ReuseableCodes.ReusableMethods;
 import com.Organics.LyncOrganic.entity.SellerProduct;
 import com.Organics.LyncOrganic.entity.UserSeller;
 import com.Organics.LyncOrganic.repository.UserSeller_Repo;
@@ -19,13 +20,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class UserSeller_ServiceImpl implements UserSeller_Service {
     @Autowired
     UserSeller_Repo userSellerRepo;
+    @Autowired
+    ReusableMethods reusableMethods;
+
+    private Map<String, List<UserSeller>> userSellerCache = new HashMap<>();
+
     @Autowired
     @Lazy
     private ProductCerti_Service productCertiService;
@@ -107,6 +115,24 @@ public class UserSeller_ServiceImpl implements UserSeller_Service {
 
 
     @Override
+//    public List<UserSeller> findByNameOrEmailList(String name, String email) {
+//        if (name == null) {
+//            name = "";
+//        }
+//        if (email == null) {
+//            email = "";
+//        }
+//
+//        String userName = name.toLowerCase();
+//        String userEmail = email.toLowerCase();
+//
+//        return userSellerRepo.findAll().stream()
+//                .filter(sellerBuyer ->
+//                        reusableMethods.isPartialMatch(sellerBuyer.getUserName().toLowerCase(), userName) ||
+//                                reusableMethods.isPartialMatch(sellerBuyer.getEmailId().toLowerCase(), userEmail))
+//                .collect(Collectors.toList());
+//    }
+
     public List<UserSeller> findByNameOrEmailList(String name, String email) {
         if (name == null) {
             name = "";
@@ -115,28 +141,23 @@ public class UserSeller_ServiceImpl implements UserSeller_Service {
             email = "";
         }
 
-        String userName = name.toLowerCase();
-        String userEmail = email.toLowerCase();
+        String key = name.toLowerCase() + "_" + email.toLowerCase();
+        if (userSellerCache.containsKey(key)) {
+            return userSellerCache.get(key);
+        }
 
-        return userSellerRepo.findAll().stream()
+        String finalName = name;
+        String finalEmail = email;
+        List<UserSeller> result = userSellerRepo.findAll().stream()
                 .filter(sellerBuyer ->
-                        isPartialMatch(sellerBuyer.getUserName().toLowerCase(), userName) ||
-                                isPartialMatch(sellerBuyer.getEmailId().toLowerCase(), userEmail))
+                        reusableMethods. isPartialMatch(sellerBuyer.getUserName().toLowerCase(), finalName.toLowerCase()) ||
+                                reusableMethods.  isPartialMatch(sellerBuyer.getEmailId().toLowerCase(), finalEmail.toLowerCase()))
                 .collect(Collectors.toList());
+
+        userSellerCache.put(key, result);
+        return result;
     }
 
-    private boolean isPartialMatch(String source, String target) {
-        if (source.length() < target.length()) {
-            return false;
-        }
-
-        for (int i = 0; i < target.length(); i++) {
-            if (source.charAt(i) != target.charAt(i)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public void statusUpdate(Long id ,Boolean status)

@@ -11,7 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,15 +23,18 @@ public class Product_ServiceImpl implements Product_Service {
     @Autowired
     private Product_Repo productRepo;
 
+    private Map<Long, Product> productCache = new HashMap<>();
+
+
     @Override
     public List<Product> findall() {
         return productRepo.findAll();
     }
 
-    @Override
-    public Product getProductById(Integer pid) {
-        return productRepo.findById(Long.valueOf(pid)).orElse(null);
-    }
+//    @Override
+//    public Product getProductById(Integer pid) {
+//        return productRepo.findById(Long.valueOf(pid)).orElse(null);
+//    }
 
     @Override
     public Product addProduct(Product product) {
@@ -93,6 +99,85 @@ public class Product_ServiceImpl implements Product_Service {
 
         return null;
     }
+
+@Override
+    public Product getProductById(Integer pid) {
+        Long id= Long.valueOf(pid);
+
+        if (productCache.containsKey(id)) {
+            System.out.println(productCache);
+            return productCache.get(id);
+        }
+
+        Product product = productRepo.findById(id).orElse(null);
+        if (product != null) {
+            productCache.put(id, product);
+        }
+
+        return product;
+    }
+
+
+
+
+
+
+
+//    private Map<Long, Product> productCache = new HashMap<>();
+//    private ProductRepository productRepository;
+
+
+
+    private void initializeCache() {
+        List<Product> products = productRepo.findAll();
+        products.forEach(product -> productCache.put(product.getPid(), product));
+    }
+
+    public List<Product> findAll2() {
+        return new ArrayList<>(productCache.values());
+    }
+
+    public Product findById(Long id) {
+        return productCache.get(id);
+    }
+
+    public Product save2(Product product) {
+        Product savedProduct = productRepo.save(product);
+        productCache.put(savedProduct.getPid(), savedProduct);
+        return savedProduct;
+    }
+
+    public void deleteById(Long id) {
+        productRepo.deleteById(id);
+        productCache.remove(id);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
