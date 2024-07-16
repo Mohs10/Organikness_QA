@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReusableMethods {
 
-    int x;
+
 
     public boolean isPartialMatch(String source, String target) {
         if (source.length() < target.length()) {
